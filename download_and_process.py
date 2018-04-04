@@ -7,30 +7,45 @@ import shutil
 
 def download_and_process(companyCode, cik=None):
     print companyCode
-    with open(companyCode + '_data' + '.txt', 'w') as f:
-        f.write("YEAR,COSDIST,JACDIST\n")
-        if cik is None:
-            years = download.get_filings(companyCode)
-        else:
-            years = download.get_filings(companyCode, cik=cik)
-        
-        parse.parse_stock_multiple_years(companyCode, years)
 
-        stockdata = []
+    if cik is None:
+        years = download.get_filings(companyCode)
+    else:
+        years = download.get_filings(companyCode, cik=cik)
 
-        for year_one in years:
-            try:
-                print str(int(year_one)+1)
-                year_two_data = compare.compare_stock(companyCode, year_one, str(int(year_one)+1))
-                stockdata.append(str(int(year_one)+1) + ',' + str(year_two_data['cosDist']) + ',' + str(year_two_data['jaccard'])+'\n')
-            except:
-                pass
+    parse.parse_stock_multiple_years(companyCode, years)
 
-        print companyCode
-        print stockdata
-        f.writelines(stockdata)
+    folder = 'Data/'
+    try:
+        os.makedirs(os.path.dirname(folder))
+    except:
+        pass
 
-    #shutil.rmtree(companyCode)
+    print sorted(years)
+
+    for year_one in set(years):
+        try:
+            print year_one
+            print str(int(year_one)+1)
+            year_two_data = compare.compare_stock(companyCode, year_one, str(int(year_one)+1))
+            stockdata = companyCode + ',' + str(year_two_data['cosDist']) + ',' + str(year_two_data['jaccard'])+'\n'
+
+            print "Writing"
+            filepath = folder + year_one + '_data.txt'
+            if not os.path.isfile(filepath):
+                with open(filepath, 'w') as f:
+                    f.write("TICKER,COSDIST,JACDIST\n")
+            with open(filepath, 'a') as f:
+                f.write(stockdata)
+        except Exception as err:
+            print (err)
+            pass
+
+    try:
+        shutil.rmtree(companyCode + '/')
+    except Exception as err:
+        print (err)
+        pass
 
 
 if __name__ == "__main__":
