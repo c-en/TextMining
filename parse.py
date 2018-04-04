@@ -11,7 +11,7 @@ def parse_stock(stock_name, year):
             # write to Tickers/AAPL/AAPL10k1A2017
             g = open(stock_name + '/'+ stock_name + filing + section + '_' + year + '.txt', 'w')
 
-            # get string of 10k html
+            # get string of 10K/10Q html
             s = f.read()
             # remove newlines
             s = re.sub('\n', ' ', s)
@@ -28,7 +28,7 @@ def parse_stock(stock_name, year):
             # break into sections, by !!!!!
             t = s.split('!!!!!')
 
-        # find section 1A (risk factors), and write to new file
+        # find sections and write to new file
         for u in t:
             if (u[: 3] == ' ' + section):
                 g.write(u)
