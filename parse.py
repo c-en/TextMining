@@ -5,7 +5,7 @@ def parse_stock(stock_name, year):
     # input AAPL 2017, open Tickers/AAPL/AAPL10k2017
     sections = ['1A']
     filings = ['_10Q_','_10K_']
-    for section in sections
+    for section in sections:
         for filing in filings :
             f = open(stock_name + '/'+ stock_name + filing + year + '.txt', 'r')
             # write to Tickers/AAPL/AAPL10k1A2017
