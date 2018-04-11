@@ -27,7 +27,7 @@ def get_filings(companyCode, date='20200101', cik=None, count=100):
     for old_filename in os.listdir(src_dir):
         parts = old_filename.split('-')
         old_year = parts[1]
-        if int(old_year) > 20:
+        if int(old_year) > 50:
             new_year = '19' + old_year
         else:
             new_year = '20' + old_year

@@ -35,7 +35,10 @@ def parse_stock(stock_name, year):
 
 def parse_stock_multiple_years(stock_name, years):
     for year in years:
-        parse_stock(stock_name, year)
+        try:
+            parse_stock(stock_name, year)
+        except:
+            pass
 
 if __name__ == "__main__":
     parse_stock(sys.argv[1], sys.argv[2])
